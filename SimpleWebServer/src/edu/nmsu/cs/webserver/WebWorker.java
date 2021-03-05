@@ -28,6 +28,8 @@ import java.io.OutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.*;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -140,50 +142,114 @@ public class WebWorker implements Runnable
 	 * 
 	 * @param os
 	 *          is the OutputStream object to write to
+	 * @param file
+	 * 			is a String representing the file/directory being requested
 	 **/
 	private void writeContent(OutputStream os, String file) throws Exception
 	{
-		if(file.equals("/")) {
-			writeHTTPHeader(os, "text/html", "200 OK");
-			os.write("<html><head></head><body>\n".getBytes());
-			os.write("<h3>My web server works!</h3>\n".getBytes());
-			os.write("</body></html>\n".getBytes());
-		}
-		else if(file.equals("/favicon.ico")) {
-			writeHTTPHeader(os, "text/html", "200 OK");
-		}
-		else {
-			try {
-				File fileObj = new File("." + file);
-				Scanner fileRead = new Scanner(fileObj);
-
-				writeHTTPHeader(os, "text/html", "200 OK");
-				while(fileRead.hasNextLine()) {
-					String line = fileRead.nextLine();
-					
-					if(line.contains("<cs371date>")) {
-						Date d = new Date();
-						DateFormat df = DateFormat.getDateTimeInstance();
-						line = line.replace("<cs371date>", df.format(d));
-					}
-					
-					if(line.contains("<cs371server>")) {
-						line = line.replace("<cs371server>", "Dawson's first server");
-					}
-					
-					os.write(line.getBytes());
-				}
-			}
-			catch(FileNotFoundException e) {
-				writeHTTPHeader(os, "text/html", "404 Not Found");
+		switch(file) {
+			case "/":
+				file = "/welcome/welcome.html";
+				serveHTML(os, file, "text/html");
+				break;
+			case "/favicon.ico":
+				file = "/images/favicon.ico";
+				serveImage(os, file, "image/x-icon");
+				break;
+			default:
+				String fileType = file.substring(file.lastIndexOf('.'), file.length());
 				
-				os.write("<html><head></head><body>\n".getBytes());
-				os.write("<h3>404<br />".getBytes());
-				os.write("Not found</h3>\n".getBytes());
-				os.write("</body></html>\n".getBytes());
+				switch(fileType) {
+					case ".html":
+						serveHTML(os, file, "text/html");
+						break;
+					case ".jpg":
+						serveImage(os, file, "image/jpg");
+						break;
+					case ".gif":
+						serveImage(os, file, "image/gif");
+						break;
+					case ".png":
+						serveImage(os, file, "image/png");
+						break;
+				}
+		}
+	}
+	
+	/**
+	 * Write the data of an HTML file to the OutputStream or return a 404 error if that file does
+	 * not exist.
+	 * 
+	 * @param os
+	 *          is the OutputStream object to write to
+	 * @param file
+	 * 			is a String representing the file/directory being requested
+	 * @param contentType 
+	 * 			is the content type of the file being requested
+	 **/
+	private void serveHTML(OutputStream os, String file, String contentType ) throws Exception {
+		try {
+			File fileObj = new File("." + file);
+			Scanner fileRead = new Scanner(fileObj);
 
-				System.out.println(e);
+			writeHTTPHeader(os, contentType, "200 OK");
+			while(fileRead.hasNextLine()) {
+				String line = fileRead.nextLine();
+				
+				if(line.contains("<cs371date>")) {
+					Date d = new Date();
+					DateFormat df = DateFormat.getDateTimeInstance();
+					line = line.replace("<cs371date>", df.format(d));
+				}
+				
+				if(line.contains("<cs371server>")) {
+					line = line.replace("<cs371server>", "Dawson's first server");
+				}
+				
+				os.write(line.getBytes());
 			}
+		}
+		catch(FileNotFoundException e) {
+			writeHTTPHeader(os, "text/html", "404 Not Found");
+			
+			os.write("<html><head></head><body>\n".getBytes());
+			os.write("<h3>404<br />".getBytes());
+			os.write("Not found</h3>\n".getBytes());
+			os.write("</body></html>\n".getBytes());
+
+			System.out.println(e);
+		}
+	}
+	
+	
+	/**
+	 * Write the data of an image file to the OutputStream or return a 404 error if that file does
+	 * not exist.
+	 * 
+	 * @param os
+	 *          is the OutputStream object to write to
+	 * @param file
+	 * 			is a String representing the file/directory being requested
+	 * @param contentType 
+	 * 			is the content type of the file being requested
+	 **/
+	private void serveImage(OutputStream os, String file, String contentType ) throws Exception {
+		try {
+			File fileObj = new File("." + file);
+			Scanner fileRead = new Scanner(fileObj);
+
+			writeHTTPHeader(os, contentType, "200 OK");
+			os.write(Files.readAllBytes(fileObj.toPath()));
+		}
+		catch(FileNotFoundException e) {
+			writeHTTPHeader(os, "text/html", "404 Not Found");
+			
+			os.write("<html><head></head><body>\n".getBytes());
+			os.write("<h3>404<br />".getBytes());
+			os.write("Not found</h3>\n".getBytes());
+			os.write("</body></html>\n".getBytes());
+
+			System.out.println(e);
 		}
 	}
 
