@@ -1,0 +1,9 @@
+1. For this lab I am expecting to work on it for about 4 hours.
+
+2. Thought/Design: 	0.25
+   Programming:		2
+   Debugging:		1
+   
+   Total time:		3.25
+
+3. My original estimate was about 18.75% higher than what the actual time it took me was.
