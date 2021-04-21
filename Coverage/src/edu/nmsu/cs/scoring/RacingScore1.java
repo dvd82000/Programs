@@ -39,9 +39,9 @@ public class RacingScore1
 	{
 		int s;
 		if (score1 < score2)
-			s = score2;
+			s = score1;   // Changed from s = score2;
 		else
-			s = score1;
+			s = score2;   // Changed from s = score1;
 		if (s > score3)
 			s = score3;
 		s = (score1 + score2 + score3) - s;
@@ -67,6 +67,10 @@ public class RacingScore1
 			System.err.println("Error: arguments must be integers!");
 			return;
 		}
+		
+		// Error in checking input values
+		// The program will allow for the input of scores less than 0 and greater than 50
+		
 		RacingScore1 score = new RacingScore1();
 		score.recordScores(s1, s2, s3);
 		System.out.println("Overall score: " + score.overallScore());

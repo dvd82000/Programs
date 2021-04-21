@@ -34,6 +34,10 @@ public class RacingScore2
 		score3 = s3;
 	}
 
+	/* I added more else if statements to check for when there are 2 scores of the same value.
+	 * The previous code only checked for when a specific score was less than the other two and did
+	 * not include the cases of multiple scores of the same value
+	 */
 	public int overallScore()
 	{
 		int s, s1, s2;
@@ -45,17 +49,27 @@ public class RacingScore2
 		else if (score2 < score1 && score2 < score3)
 		{
 			s1 = score1;
-			s2 = score2;
+			s2 = score3;    // Changed from s2 = score2;
 		}
 		else if (score3 < score1 && score3 < score2)
 		{
 			s1 = score1;
 			s2 = score2;
 		}
+		else if(score1 == score2)
+		{
+			s1 = score1;
+			s2 = score3;
+		}
+		else if(score1 == score3)
+		{
+			s1 = score1;
+			s2 = score2;
+		}
 		else
 		{
-			s1 = 99;
-			s2 = 99;
+			s1 = score1;
+			s2 = score2;
 		}
 		s = s1 + s2;
 		return s;
@@ -64,7 +78,10 @@ public class RacingScore2
 	public static void main(String args[])
 	{
 		int s1, s2, s3;
-		if (args == null || args.length != 3)
+		
+		// Removed args==null
+		// If args is null then args.length will not be equal to 3. The expression is redundant.
+		if (args.length != 3)
 		{
 			System.err.println("Error: must supply three arguments!");
 			return;
