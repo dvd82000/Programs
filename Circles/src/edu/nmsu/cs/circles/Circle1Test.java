@@ -36,6 +36,35 @@ public class Circle1Test
 	}
 
 	//
+	// Test circle initialization with positive values
+	//
+	@Test
+	public void circleInitTestPos()
+	{
+		Circle1 testCircle;
+		System.out.println("Running test circleInitTestPos.");
+		testCircle = new Circle1(1, 5, 3);
+		Assert.assertTrue(testCircle.center.x == 1 &&
+						  testCircle.center.y == 5 &&
+						  testCircle.radius == 3);
+	}
+	
+	//
+	// Test circle initialization with negative values
+	// Radius should still be a positive value because a circle can't have a negative radius
+	//
+	@Test
+	public void circleInitTestNeg()
+	{
+		Circle1 testCircle;
+		System.out.println("Running test circleInitTestNeg.");
+		testCircle = new Circle1(-4, -7, -2);
+		Assert.assertTrue(testCircle.center.x == -4 &&
+						  testCircle.center.y == -7 &&
+						  testCircle.radius == 2);
+	}
+	
+	//
 	// Test a simple positive move
 	//
 	@Test
@@ -82,10 +111,4 @@ public class Circle1Test
 		r = circle1.scale(0.5);
 		Assert.assertTrue(r == 1.5);
 	}
-	/***
-	 * NOT USED public static void main(String args[]) { try { org.junit.runner.JUnitCore.runClasses(
-	 * java.lang.Class.forName("Circle1Test")); } catch (Exception e) { System.out.println("Exception:
-	 * " + e); } }
-	 ***/
-
 }
