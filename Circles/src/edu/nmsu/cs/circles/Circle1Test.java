@@ -124,4 +124,42 @@ public class Circle1Test
 		testCircle = new Circle1(8, 2, 5);
 		Assert.assertTrue(circle1.intersects(testCircle));
 	}
+	
+	//
+	// Check that intersects returns true when there is an intersect
+	// Testing only on changing y values.
+	//
+	@Test
+	public void intersectsYShift()
+	{
+		System.out.println("Running test intersectsYShift.");
+		Circle1 testCircle;
+		testCircle = new Circle1(1, 6, 5);
+		Assert.assertTrue(circle1.intersects(testCircle));
+	}
+	
+	//
+	// Check that intersects returns true when there is an intersect
+	// Testing on changing x and y values.
+	//
+	@Test
+	public void intersectsXY()
+	{
+		System.out.println("Running test intersectsXY.");
+		Circle1 testCircle;
+		testCircle = new Circle1(7, 6, 5);
+		Assert.assertTrue(circle1.intersects(testCircle));
+	}
+	
+	//
+	// Check that intersects returns false when there is no intersect
+	//
+	@Test
+	public void intersectsFalse()
+	{
+		System.out.println("Running test intersectsFalse.");
+		Circle1 testCircle;
+		testCircle = new Circle1(9, 7, 5);
+		Assert.assertTrue(!circle1.intersects(testCircle));
+	}
 }
