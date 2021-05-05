@@ -111,4 +111,17 @@ public class Circle1Test
 		r = circle1.scale(0.5);
 		Assert.assertTrue(r == 1.5);
 	}
+	
+	//
+	// Check that intersects returns true when there is an intersect
+	// Testing only on changing x values.
+	//
+	@Test
+	public void intersectsXShift()
+	{
+		System.out.println("Running test intersectsXShift.");
+		Circle1 testCircle;
+		testCircle = new Circle1(8, 2, 5);
+		Assert.assertTrue(circle1.intersects(testCircle));
+	}
 }
